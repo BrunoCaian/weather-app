@@ -1,68 +1,89 @@
+import { useState } from 'react';
 import { Day, Days, FiveDaysForecast, OtherStatistcs, SlideContent, Statistc } from "./styles";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import weatherAnimations from "../../weatherAnimations";
-import WindIcon from '../../assets/wind.svg'
+import WindIcon from '../../assets/wind.svg';
 import { BsCloudRainHeavyFill } from "react-icons/bs";
 import { WiHumidity } from "react-icons/wi";
-import useMobile from '../../hooks/useIsMobile'
-import { Swiper, SwiperSlide } from 'swiper/react'
+import useMobile from '../../hooks/useIsMobile';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 export default function Forecast({ forecast }) {
-    const isMobile = useMobile()
+    const isMobile = useMobile();
+    const [activeIndex, setActiveIndex] = useState(0);
 
     return (
         <FiveDaysForecast>
             <h3>Previsão para os próximos 5 dias</h3>
             {isMobile ? (
-                <Swiper slidesPerView={1} spaceBetween={24} pagination={{ clickable: true}} navigation style={{width: '100%', maxWidth: '400px', paddingBottom:'8rem', paddingTop: '8rem'}}>
+                <Swiper
+                    slidesPerView={1}
+                    spaceBetween={24}
+                    pagination={{ clickable: true }}
+                    navigation
+                    onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
+                    style={{
+                        width: '100%',
+                        maxWidth: '400px',
+                        paddingBottom: '8rem',
+                        paddingTop: '8rem'
+                    }}
+                >
                     {forecast.map((day, index) => {
-                        const iconCode = day.weather[0].icon
-                        const animationUrl = weatherAnimations[iconCode]
+                        const iconCode = day.weather[0].icon;
+                        const animationUrl = weatherAnimations[iconCode];
 
                         return (
                             <SwiperSlide key={index}>
                                 <SlideContent>
-                                <Day key={index}>
-                                    <h4>{new Date(day.dt * 1000).toLocaleDateString("pt-BR", { weekday: "long" })}</h4>
-                                    <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', marginBottom: '1rem' }}>
-                                        {animationUrl && (
-                                            <DotLottieReact
-                                                src={animationUrl}
-                                                loop
-                                                autoplay
-                                                style={{ width: '100px', height: '100px', marginTop: '1rem' }}
-                                            />
-                                        )}
-                                        <span>{Math.round(day.main.temp - 273.15)}<sup>°C</sup></span>
-                                        <p>{day.weather[0].description}</p>
-                                    </div>
-                                    <OtherStatistcs>
-                                        <Statistc>
-                                            <WiHumidity style={{ width: '34px', height: '34px' }} />
-                                            <span style={{ marginLeft: '-6px' }}>{day.main.humidity}<span style={{ fontSize: '12px' }}>%</span></span>
-                                        </Statistc>
-                                        <Statistc>
-                                            <img src={WindIcon} alt="Ícone de vento" />
-                                            <span>{Math.round(day.wind.speed)}<span style={{ fontSize: '12px' }}>km/h</span></span>
-                                        </Statistc>
-                                        <Statistc>
-                                            <BsCloudRainHeavyFill style={{ width: '28px', height: '28px' }} />
-                                            <span>{Math.round(day.pop * 100)}<span style={{ fontSize: '12px' }}>%</span></span>
-                                        </Statistc>
-                                    </OtherStatistcs>
-                                </Day>
+                                    <Day>
+                                        <h4>{new Date(day.dt * 1000).toLocaleDateString("pt-BR", { weekday: "long" })}</h4>
+                                        <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', marginBottom: '1rem' }}>
+                                            {animationUrl && activeIndex === index && (
+                                                <DotLottieReact
+                                                    src={animationUrl}
+                                                    loop
+                                                    autoplay
+                                                    style={{ width: '100px', height: '100px', marginTop: '1rem' }}
+                                                />
+                                            )}
+                                            <span>{Math.round(day.main.temp - 273.15)}<sup>°C</sup></span>
+                                            <p>{day.weather[0].description}</p>
+                                        </div>
+                                        <OtherStatistcs>
+                                            <Statistc>
+                                                <WiHumidity style={{ width: '34px', height: '34px' }} />
+                                                <span style={{ marginLeft: '-6px' }}>
+                                                    {day.main.humidity}
+                                                    <span style={{ fontSize: '12px' }}>%</span>
+                                                </span>
+                                            </Statistc>
+                                            <Statistc>
+                                                <img src={WindIcon} alt="Ícone de vento" />
+                                                <span>
+                                                    {Math.round(day.wind.speed)}
+                                                    <span style={{ fontSize: '12px' }}>km/h</span>
+                                                </span>
+                                            </Statistc>
+                                            <Statistc>
+                                                <BsCloudRainHeavyFill style={{ width: '28px', height: '28px' }} />
+                                                <span>
+                                                    {Math.round(day.pop * 100)}
+                                                    <span style={{ fontSize: '12px' }}>%</span>
+                                                </span>
+                                            </Statistc>
+                                        </OtherStatistcs>
+                                    </Day>
                                 </SlideContent>
                             </SwiperSlide>
-
-                        )
-
+                        );
                     })}
                 </Swiper>
             ) : (
                 <Days>
                     {forecast.map((day, index) => {
-                        const iconCode = day.weather[0].icon
-                        const animationUrl = weatherAnimations[iconCode]
+                        const iconCode = day.weather[0].icon;
+                        const animationUrl = weatherAnimations[iconCode];
 
                         return (
                             <Day key={index}>
@@ -82,24 +103,31 @@ export default function Forecast({ forecast }) {
                                 <OtherStatistcs>
                                     <Statistc>
                                         <WiHumidity style={{ width: '34px', height: '34px' }} />
-                                        <span style={{ marginLeft: '-6px' }}>{day.main.humidity}<span style={{ fontSize: '12px' }}>%</span></span>
+                                        <span style={{ marginLeft: '-6px' }}>
+                                            {day.main.humidity}
+                                            <span style={{ fontSize: '12px' }}>%</span>
+                                        </span>
                                     </Statistc>
                                     <Statistc>
                                         <img src={WindIcon} alt="Ícone de vento" />
-                                        <span>{Math.round(day.wind.speed)}<span style={{ fontSize: '12px' }}>km/h</span></span>
+                                        <span>
+                                            {Math.round(day.wind.speed)}
+                                            <span style={{ fontSize: '12px' }}>km/h</span>
+                                        </span>
                                     </Statistc>
                                     <Statistc>
                                         <BsCloudRainHeavyFill style={{ width: '28px', height: '28px' }} />
-                                        <span>{Math.round(day.pop * 100)}<span style={{ fontSize: '12px' }}>%</span></span>
+                                        <span>
+                                            {Math.round(day.pop * 100)}
+                                            <span style={{ fontSize: '12px' }}>%</span>
+                                        </span>
                                     </Statistc>
                                 </OtherStatistcs>
                             </Day>
-                        )
+                        );
                     })}
                 </Days>
             )}
-
-
         </FiveDaysForecast>
-    )
+    );
 }
