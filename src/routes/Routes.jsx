@@ -1,72 +1,72 @@
-import { useEffect, useState } from "react"
-import { Route, Routes, useNavigate, useParams } from "react-router-dom"
-import { fetchWeatherData, fetchForecastData, fetchAirQualityData, fetchCoordinates } from "../api"
-import Home from "../pages/Home"
-import WeatherPage from "../pages/Weather"
-import { AlertCircle } from "lucide-react"
-import { BackButton, ErrorContainer, ErrorMessage, ErrorTitle } from "./styles/ErrorMessage"
-import { LoadingContainer } from "./styles/Loading"
-import loadingGif from '../assets/loading.gif'
+import { useEffect, useState } from "react";
+import { Route, Routes, useNavigate, useParams } from "react-router-dom";
+import { fetchWeatherData, fetchForecastData, fetchAirQualityData, fetchCoordinates } from "../api";
+import Home from "../pages/Home";
+import WeatherPage from "../pages/Weather";
+import { AlertCircle } from "lucide-react";
+import { BackButton, ErrorContainer, ErrorMessage, ErrorTitle } from "./styles/ErrorMessage";
+import { LoadingContainer } from "./styles/Loading";
+import loadingGif from '../assets/loading.gif';
 
 function WeatherRoute({ apiKey }) {
-  const { city } = useParams()
-  const navigate = useNavigate()
+  const { city } = useParams();
+  const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [data, setData] = useState({
     weather: null,
     aqiGauge: null,
     forecast: [],
-    cityInfo: null
-  })
+    cityInfo: null,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!city) return
+      if (!city) return;
 
-      setLoading(true)
-      setError(null)
+      setLoading(true);
+      setError(null);
 
       try {
-        const coords = await fetchCoordinates(apiKey, city)
-        if (!coords) throw new Error("Cidade não encontrada")
+        const coords = await fetchCoordinates(apiKey, city);
+        if (!coords) throw new Error("Cidade não encontrada");
 
         const cityInfo = {
           name: coords.name,
           state: coords.state,
-          country: coords.country
-        }
+          country: coords.country,
+        };
 
         const [weatherData, forecastData, aqi] = await Promise.all([
           fetchWeatherData(apiKey, coords.lat, coords.lon),
           fetchForecastData(apiKey, coords.lat, coords.lon),
-          fetchAirQualityData(apiKey, coords.lat, coords.lon)
-        ])
+          fetchAirQualityData(apiKey, coords.lat, coords.lon),
+        ]);
 
         setData({
           weather: weatherData,
-          forecast: forecastData?.filter(item => item.dt_txt.includes('12:00:00')) || [],
+          forecast: forecastData?.filter((item) => item.dt_txt.includes("12:00:00")) || [],
           aqiGauge: aqi,
-          cityInfo
-        })
+          cityInfo,
+        });
       } catch (err) {
-        console.error(err)
-        setError(err.message || "Erro ao buscar os dados do clima")
+        console.error(err);
+        setError(err.message || "Erro ao buscar os dados do clima");
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchData()
-  }, [city, apiKey])
+    fetchData();
+  }, [city, apiKey]);
 
   if (loading) {
     return (
       <LoadingContainer>
         <img src={loadingGif} alt="Carregando..." />
       </LoadingContainer>
-    )
+    );
   }
 
   if (error) {
@@ -76,13 +76,13 @@ function WeatherRoute({ apiKey }) {
         <ErrorTitle>Ops! Algo deu errado</ErrorTitle>
         <ErrorMessage>{error}</ErrorMessage>
         <BackButton onClick={() => {
-          setError(null)
-          navigate('/')
+          setError(null);
+          navigate('/');
         }}>
           Voltar para o início
         </BackButton>
       </ErrorContainer>
-    )
+    );
   }
 
   return (
@@ -92,7 +92,7 @@ function WeatherRoute({ apiKey }) {
       aqiGauge={data.aqiGauge}
       cityInfo={data.cityInfo}
     />
-  )
+  );
 }
 
 export default function RoutesComponent({ apiKey }) {
@@ -101,5 +101,6 @@ export default function RoutesComponent({ apiKey }) {
       <Route path="/" element={<Home />} />
       <Route path="/weather/:city" element={<WeatherRoute apiKey={apiKey} />} />
     </Routes>
-  )
+  );
 }
+
