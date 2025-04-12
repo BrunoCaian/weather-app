@@ -1,7 +1,7 @@
 import { Day, Days, FiveDaysForecast, OtherStatistcs, SlideContent, Statistc } from "./styles";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import weatherAnimations from "../../weatherAnimations";
-import WindImg from '../../assets/Wind.svg'
+import WindIcon from '../../assets/wind.svg'
 import { BsCloudRainHeavyFill } from "react-icons/bs";
 import { WiHumidity } from "react-icons/wi";
 import useMobile from '../../hooks/useIsMobile'
@@ -85,7 +85,7 @@ export default function Forecast({ forecast }) {
                                         <span style={{ marginLeft: '-6px' }}>{day.main.humidity}<span style={{ fontSize: '12px' }}>%</span></span>
                                     </Statistc>
                                     <Statistc>
-                                        <img src={WindImg} alt="Ícone de vento" />
+                                        <img src={WindIcon} alt="Ícone de vento" />
                                         <span>{Math.round(day.wind.speed)}<span style={{ fontSize: '12px' }}>km/h</span></span>
                                     </Statistc>
                                     <Statistc>
