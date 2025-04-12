@@ -5,8 +5,7 @@ import { FaTemperatureHigh, FaTemperatureLow } from 'react-icons/fa'
 import { BsCloudRainHeavyFill } from "react-icons/bs";
 import { WiThermometer, WiHumidity } from 'react-icons/wi';
 import { FaEye } from 'react-icons/fa';
-import HumidityImg from '../../assets/humidity.svg'
-import WindImg from '../../assets/Wind.svg'
+import WindIcon from '../../assets/wind.svg'
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import weatherAnimations from "../../weatherAnimations";
 import AqiGauge from '../AqiGauge'
@@ -106,7 +105,7 @@ export default function WeatherCurrent({ data, aqi, forecast, cityInfo }) {
                     <WindStatus>
                         <p>Estado do Vento</p>
                         <div>
-                            <img src={WindImg} alt="Vento" style={{ width: '100px', height: '100px' }} />
+                            <img src={WindIcon} alt="Vento" style={{ width: '100px', height: '100px' }} />
                             <span>{(data.wind.speed * 3.6).toFixed(1)}<span>km/h</span></span>
                         </div>
 
