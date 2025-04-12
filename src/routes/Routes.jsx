@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom"
+import { Route, Routes, useNavigate, useParams } from "react-router-dom"
 import { fetchWeatherData, fetchForecastData, fetchAirQualityData, fetchCoordinates } from "../api"
 import Home from "../pages/Home"
 import WeatherPage from "../pages/Weather"
@@ -8,8 +8,11 @@ import { BackButton, ErrorContainer, ErrorMessage, ErrorTitle } from "./styles/E
 import { LoadingContainer } from "./styles/Loading"
 import loadingGif from '../assets/loading.gif'
 
-export default function RoutesComponent({ apiKey }) {
-  const [loading, setLoading] = useState(false)
+function WeatherRoute({ apiKey }) {
+  const { city } = useParams()
+  const navigate = useNavigate()
+
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [data, setData] = useState({
     weather: null,
@@ -18,20 +21,15 @@ export default function RoutesComponent({ apiKey }) {
     cityInfo: null
   })
 
-  const navigate = useNavigate()
-
-  const location = useLocation()
-  const cityParams = new URLSearchParams(location.search).get('city')
-
   useEffect(() => {
     const fetchData = async () => {
-      if (!cityParams) return
+      if (!city) return
 
       setLoading(true)
       setError(null)
 
       try {
-        const coords = await fetchCoordinates(apiKey, cityParams)
+        const coords = await fetchCoordinates(apiKey, city)
         if (!coords) throw new Error("Cidade não encontrada")
 
         const cityInfo = {
@@ -61,13 +59,12 @@ export default function RoutesComponent({ apiKey }) {
     }
 
     fetchData()
-  }, [cityParams, apiKey])
-
+  }, [city, apiKey])
 
   if (loading) {
     return (
       <LoadingContainer>
-        <img src={loadingGif} alt="" />
+        <img src={loadingGif} alt="Carregando..." />
       </LoadingContainer>
     )
   }
@@ -79,7 +76,7 @@ export default function RoutesComponent({ apiKey }) {
         <ErrorTitle>Ops! Algo deu errado</ErrorTitle>
         <ErrorMessage>{error}</ErrorMessage>
         <BackButton onClick={() => {
-          setError(null);
+          setError(null)
           navigate('/')
         }}>
           Voltar para o início
@@ -89,21 +86,20 @@ export default function RoutesComponent({ apiKey }) {
   }
 
   return (
+    <WeatherPage
+      data={data.weather}
+      forecast={data.forecast}
+      aqiGauge={data.aqiGauge}
+      cityInfo={data.cityInfo}
+    />
+  )
+}
+
+export default function RoutesComponent({ apiKey }) {
+  return (
     <Routes>
       <Route path="/" element={<Home />} />
-      {cityParams && !loading && !error && data.weather && (
-        <Route
-          path="/weather"
-          element={
-            <WeatherPage
-              data={data.weather}
-              forecast={data.forecast}
-              aqiGauge={data.aqiGauge}
-              cityInfo={data.cityInfo}
-            />
-          }
-        />
-      )}
+      <Route path="/weather/:city" element={<WeatherRoute apiKey={apiKey} />} />
     </Routes>
   )
 }

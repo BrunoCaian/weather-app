@@ -8,7 +8,7 @@ export function useSearch() {
     const handleSearch = (e) => {
         e.preventDefault();
         if (city.trim()) {
-            navigate(`/weather?city=${city}`);
+            navigate(`/weather/${city.toLowerCase()}`);
             setCity('');
         }
     };
