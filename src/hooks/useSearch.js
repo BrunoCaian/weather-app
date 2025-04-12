@@ -9,7 +9,6 @@ export function useSearch() {
     e.preventDefault();
     if (city.trim()) {
         const citySlug = encodeURIComponent(city.trim().toLowerCase());
-        console.log("Navigating to:", `/weather/${citySlug}`);
         navigate(`/weather/${citySlug}`);
         setCity(""); 
     }

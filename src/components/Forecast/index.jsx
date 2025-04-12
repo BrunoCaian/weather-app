@@ -42,7 +42,7 @@ export default function Forecast({ forecast }) {
                                             <span style={{ marginLeft: '-6px' }}>{day.main.humidity}<span style={{ fontSize: '12px' }}>%</span></span>
                                         </Statistc>
                                         <Statistc>
-                                            <img src={WindImg} alt="Ícone de vento" />
+                                            <img src={WindIcon} alt="Ícone de vento" />
                                             <span>{Math.round(day.wind.speed)}<span style={{ fontSize: '12px' }}>km/h</span></span>
                                         </Statistc>
                                         <Statistc>
