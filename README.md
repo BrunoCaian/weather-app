@@ -18,7 +18,7 @@ Aplicação web de clima feita em React que exibe informações em tempo real so
 
 ## 🔗 Deploy
 
-O projeto está disponível no Netlify: [Na hora do clima](nahoradoclima.netlify.app)
+O projeto está disponível no Netlify: [Na hora do clima](https://nahoradoclima.netlify.app/)
 
 ---
 
