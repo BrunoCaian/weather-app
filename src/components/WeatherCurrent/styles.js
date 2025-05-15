@@ -1,31 +1,17 @@
 import styled from "styled-components";
-import BackgroundImg from '../../assets/bg-temp-now.jpeg'
+
+// export const Container = styled.div`
+//     width: 100vw;
+// `
 
 export const SectionStyles = styled.section`
-    /* position: relative; */
+    
     color: #fff;
     backdrop-filter: blur(10px);
     padding: 15px;
     border-radius: 1rem;
     display: flex;
     flex-direction: column;
-    /* overflow: hidden; */
-
-    /* &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
-        background-image: url(${BackgroundImg});
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-        filter: blur(10px);
-        opacity: 0.6;
-        z-index: -1;
-    } */
 
     @media (max-width: 500px) {
         border-radius: 0px;
@@ -34,10 +20,8 @@ export const SectionStyles = styled.section`
 
 export const TemperatureNow = styled(SectionStyles)`
    background: linear-gradient(135deg, #1e3c72, #2a5298);
-    
-    /* background-image: url(${BackgroundImg});
-    background-size: cover;
-    background-position: center; */
+    width: 50%;
+   
 
     @media (max-width: 900px) {
         width: 98%;
@@ -184,7 +168,7 @@ export const OtherStatistcs =  styled.div`
 `
 export const TodayHighlights = styled(SectionStyles)`
     background: linear-gradient(145deg, #4b6cb7, #182848);
-    width: 900px;
+    width: 100%;
     align-items: center;
     background-color: #6D67D0;
 
