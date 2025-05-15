@@ -1,4 +1,4 @@
-# 🌤️ Weather App
+# 🌤️ NaHoraDoClima
 
 Aplicação web de clima feita em React que exibe informações em tempo real sobre:
 
